@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  prometheus:
+    build: ./prometheus/
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+    ports:
+      - 9090:9090
+
+  grafana:
+    build: ./grafana/
+    container_name: grafana
+    volumes:
+      - ./grafana-storage:/var/lib/grafana
+    ports:
+      - 3000:3000
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    volumes:
+      - ./proc:/host/proc:ro
+      - ./sys:/host/sys:ro
+      - ./:/rootfs:ro
+    ports:
+      - 9100:9100
